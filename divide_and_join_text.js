@@ -1,0 +1,1 @@
+/Applications/Adobe Illustrator 2020/Presets.localized/en_US/Scripts/divide_and_join_text.js
