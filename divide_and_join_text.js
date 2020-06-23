@@ -24,6 +24,8 @@ if (doc) {
 }
 
 function divide(selected) {
+	// Convert it to a point object, for no reason other than they are nicer for single words
+	selected.convertAreaObjectToPointObject();
 
 	if (selected.contents.indexOf("\n") === -1) {
 		// Since this is one line we will assume the user is trying to split by word rather than line
@@ -35,11 +37,11 @@ function divide(selected) {
 		textfield_left = selected.left;
 
 		// Set selected element to value of ' '
-		selected.contents = ' ';
-		// Find the width of one character 
+		selected.contents = " ";
+		// Find the width of one character
 		var char_width = selected.width;
 
-		// Set selected element to value of first word 
+		// Set selected element to value of first word
 		selected.contents = array_of_words[0];
 		// Convert it to a point object, for no reason other than they are nicer for single words
 		selected.convertAreaObjectToPointObject();
@@ -53,13 +55,16 @@ function divide(selected) {
 		var new_text_field;
 
 		for (var j = 1; j < array_of_words.length; j++) {
-			// Duplicate text field and place at beginning of first text 
-			new_text_field = selected.duplicate(doc, ElementPlacement.PLACEATBEGINNING);
+			// Duplicate text field and place at beginning of first text
+			new_text_field = selected.duplicate(
+				doc,
+				ElementPlacement.PLACEATBEGINNING
+			);
 
 			// Set contents of this new text field to the next word in the array
 			new_text_field.contents = array_of_words[j];
 
-			// Set left position of text field by offset 
+			// Set left position of text field by offset
 			new_text_field.left = textfield_left + offset;
 
 			// Update offset based on text_field width with extra char
@@ -71,7 +76,6 @@ function divide(selected) {
 			// Convert it to a point object, for no reason other than they are nicer for single words
 			new_text_field.convertAreaObjectToPointObject();
 		}
-		
 	} else {
 		//getObject justification
 		var justification = selected.story.textRange.justification;
@@ -113,7 +117,7 @@ function divide(selected) {
 	}
 }
 
-function get_line_content(selection){
+function get_line_content(selection) {
 	var lines = selection.lines;
 	var out_lines = [];
 	for (var i = 0; i < lines.length; i++) {
@@ -124,10 +128,12 @@ function get_line_content(selection){
 
 function join(selections) {
 	selections = selections.reverse();
-	selections[0].contents = get_tf_contents(selections).join(pick_join_char(selections));
+	selections[0].contents = get_tf_contents(selections).join(
+		pick_join_char(selections)
+	);
 	selections[0].convertPointObjectToAreaObject();
 
-	for (var i = 1; i < selections.length; i++){
+	for (var i = 1; i < selections.length; i++) {
 		selections[i].remove();
 	}
 }
@@ -149,22 +155,20 @@ function pick_join_char(selections) {
 	// alert(max_width+ ' '+ min_width+ ' : '+ max_height+' '+ min_height);
 
 	if (Math.abs(max_width - min_width) > Math.abs(max_height - min_height)) {
-		return ' ';
-	}else{
-		return '\n';
+		return " ";
+	} else {
+		return "\n";
 	}
-
 }
 
-function get_tf_contents(selection){
+function get_tf_contents(selection) {
 	var out_array = [];
-	for (var i = 0; i < selection.length; i++){
+	for (var i = 0; i < selection.length; i++) {
 		out_array.push(selection[i].contents);
 	}
 	return out_array;
 }
 
-function trim(s){
-  return ( s || '' ).replace( /^\s+|\s+$/g, '' );
+function trim(s) {
+	return (s || "").replace(/^\s+|\s+$/g, "");
 }
-
